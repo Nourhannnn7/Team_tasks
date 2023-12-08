@@ -1,0 +1,93 @@
+import 'package:flutter/material.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:space_flight_recorder/view/home.dart';
+import '../view/about.dart';
+import '../view/upcoming.dart';
+import '../view/previous.dart';
+
+class Nav_bar extends StatefulWidget {
+  const Nav_bar({super.key});
+
+  @override
+  State<Nav_bar> createState() => _Nav_barState();
+}
+
+class _Nav_barState extends State<Nav_bar> {
+
+  bool status = false;
+  int index = 0;
+  @override
+  Widget build(BuildContext context) {
+    return
+      // body: _pages[_index],
+     SingleChildScrollView(
+       // scrollDirection: Axis.horizontal,
+       child: GNav(
+          // onTabChange: (index) {
+          //   setState(() {
+          //     _index = index;
+          //   });
+          // },
+          curve: Curves.easeInOut,
+          backgroundColor: Colors.black,
+          color: Colors.white,
+          activeColor: Colors.blue,
+          tabBackgroundColor: Colors.transparent,
+          gap: 3,
+          hoverColor: Colors.grey,
+          iconSize: 30,
+          tabs:  [
+            GButton(
+              text: 'HOME',
+              icon: Icons.home,
+              onPressed:(){
+                index=1;
+              },
+            ),
+            GButton(
+              text: 'PREVIOUS',
+              icon: Icons.restart_alt,
+              onPressed:(){
+                index=2;
+              },
+            ),
+            GButton(
+              text: 'UPCOMING',
+              icon: Icons.rocket_launch,
+              onPressed:(){
+                index=3;
+              },
+            ),
+
+            GButton(
+              text: 'ABOUT',
+              icon: Icons.info,
+              onPressed:(){
+                index=4;
+              },
+            ),
+          ],
+         onTabChange: pagechange(),
+        ),
+     );
+  }
+
+  pagechange() {
+    if (index==1)
+      {
+        Navigator.pushNamed(context, 'home');
+      }
+    if (index==2)
+    {
+      Navigator.pushNamed(context, 'previous');
+    }
+    if (index==3)
+    {
+      Navigator.pushNamed(context, 'upcoming');
+    }
+    if (index==4)
+    {
+      Navigator.pushNamed(context, 'info');
+    }
+  }
+}
