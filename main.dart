@@ -1,120 +1,101 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-void main() {
-  runApp(MyApp());
-}
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text("Graduation Project"),
-        ),
-        body: Container(
-          padding: const EdgeInsets.all(15),
+      title: 'Sign Up Page',
+      theme: ThemeData(
+        primaryColor: Color(0xFF3A5985),
+        scaffoldBackgroundColor: Color(0xFFB2CAEE),
+        backgroundColor: Color(0xFFF1F4FB),
+        primarySwatch: Colors.blue,
+      ),
+      home: ChangeNotifierProvider(
+        create: (context) => SignUpModel(),
+        child: SignUpPage(),
+      ),
+    );
+  }
+}
+
+class SignUpModel extends ChangeNotifier {
+  String _email = '';
+  String _password = '';
+
+  String get email => _email;
+  String get password => _password;
+
+  void setEmail(String value) {
+    _email = value;
+    notifyListeners();
+  }
+
+  void setPassword(String value) {
+    _password = value;
+    notifyListeners();
+  }
+}
+
+class SignUpPage extends StatelessWidget {
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Sign Up'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Form(
+          key: _formKey,
           child: Column(
             children: [
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color:const  Color(0xff3a5985), width: 3,),
-                  borderRadius: BorderRadius.circular(19),
-                  color: const Color(0xffb2caee),
-                ),
-                margin: const EdgeInsets.all(10),
-                width: 380,
-                padding: const EdgeInsets.all(13),
-                alignment: Alignment.center,
-                child:const  Text(
-                  "Secure Shield",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w900,
-                    fontSize: 20,
-                    color: Color(0xff618fca),
-                  ),
-                ),
+              TextFormField(
+                decoration: InputDecoration(labelText: 'Email'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your email';
+                  }
+                  // You can add more sophisticated email validation here
+                  return null;
+                },
+                onChanged: (value) {
+                  Provider.of<SignUpModel>(context, listen: false)
+                      .setEmail(value);
+                },
               ),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color:const  Color(0xff3a5985), width: 3,),
-                  borderRadius: BorderRadius.circular(19),
-                  color:const  Color(0xffb2caee),
-                ),
-                width: 362,
-                padding: const EdgeInsets.all(13),
-                alignment: Alignment.center,
-                child: const Text(
-                  "Our application targets female students in Egyptian Universities especially KafrElsheik, Our purpose is to combat electronic blackmail against women.",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w900,
-                    fontSize: 15,
-                    color: Color(0xff618fca),
-                  ),
-                ),
+              SizedBox(height: 16.0),
+              TextFormField(
+                decoration: InputDecoration(labelText: 'Password'),
+                obscureText: true,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your password';
+                  }
+                  // You can add more sophisticated password validation here
+                  return null;
+                },
+                onChanged: (value) {
+                  Provider.of<SignUpModel>(context, listen: false)
+                      .setPassword(value);
+                },
               ),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: const Color(0xff3a5985), width: 3,),
-                  borderRadius: BorderRadius.circular(19),
-                  color:const  Color(0xffb2caee),
-                ),
-                width: 380,
-                margin:const  EdgeInsets.all(10),
-                padding: const EdgeInsets.all(13),
-                alignment: Alignment.center,
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                     Row(
-                      children: [
-                         const Icon(Icons.star, size: 25),
-                         const Icon(Icons.star, size: 25),
-                        const Icon(Icons.star, size: 25),
-                        const Icon(Icons.star, size: 25),
-                        const Icon(Icons.star, size: 25),
-                      ],
-                    ),
-                    const Spacer(), // Add Spacer widget to create space
-                    const Text("40 Reviews", style:
-                    const TextStyle(fontSize: 18), ),
-                  ],
-                ),
-              ),
-              Container(
-                width: 359,
-                padding: const EdgeInsets.all((10)),
-                decoration: BoxDecoration(
-                  border: Border.all(color: const Color(0xff3a5985), width: 3,),
-                  borderRadius: BorderRadius.circular(19),
-                  color: const Color(0xffb2caee),
-                ),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Column(
-                          children: const [
-                             Icon(Icons.add_call),
-                            Text("Hotline 07775000", style: TextStyle(color: Color(0xff618fca), fontWeight: FontWeight.w900 ),),
-                            
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            Icon(Icons.add),
-                            Text("FB: Secure Shield", style: TextStyle(color: Color(0xff618fca), fontWeight: FontWeight.w900),)
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            Icon(Icons.adb_sharp),
-                            Text("Chat with us", style: TextStyle(color: Color(0xff618fca), fontWeight: FontWeight.w900), )
-                          ],
-                        )
-                      ],
-                    ),
+              SizedBox(height: 16.0),
+              ElevatedButton(
+                onPressed: () {
+                  if (_formKey.currentState?.validate() ?? false) {
+                    // Perform sign-up logic here
+                    // You can access the email and password using:
+                    // Provider.of<SignUpModel>(context, listen: false).email
+                    // Provider.of<SignUpModel>(context, listen: false).password
+                  }
+                },
+                child: Text('Sign Up'),
               ),
             ],
           ),
